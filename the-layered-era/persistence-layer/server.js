@@ -7,6 +7,47 @@ app.listen(PORT, function() {
     console.log(`Server is running on  ${PORT}`)
 });
 
+// Endpoint to select all events
+app.get("/events", async(req, res) => {
+    try {
+        const allEvents = []// query db when it's setup and connected
+        res.json(allEvents.rows);
+    } catch (err) {
+        console.log(err.message);
+    }
+});
+
+// Endpoint to select all registered participants
+app.get("/participants", async(req, res) => {
+    try {
+        const allParticipants = []// query db when it's setup and connected
+        res.json(allParticipants.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
+// Endpoint for creating new events
+app.post("/events", async (req, res) => {
+    try {
+        const { uuid, date, time, title, description, email } = req.body;
+        const newEvent = []; // Insert into db when it's setup and connected
+        res.json(newEvent.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+    }
+})
+
+// Endpoint for registering participants
+app.post("/participants", async (req, res) => {
+    try {
+        const { uuid, eventID, name, email } = req.body;
+        const newParticipant = []; // Insert into db when it's setup and connected
+        res.json(newParticipant.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+    }
+})
 
 function isValidName(name) {
     return name.length != 0 && name.length <= 600;
