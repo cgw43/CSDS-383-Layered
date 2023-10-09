@@ -88,3 +88,4 @@ function isValidParticipantUUID(uuid) {
 function isValidEventUUID(uuid) {
     // waiting until db is connected
 }
+
