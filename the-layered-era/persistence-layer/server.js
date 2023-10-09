@@ -1,9 +1,10 @@
-const express = require('express')
-const pg = require('pg')
-var connectionString = "postgres://postgres:password@localhost/ip:5432/event_manager"
+const express = require('express');
+const pg = require('pg');
 const PORT = process.env.PORT || 4001
+const app = express();
 
-const app = express()
+const connectionString = "postgres://postgres:password@localhost/event_manager"
+const client = new pg.Client(connectionString);
 
 app.listen(PORT, function() {
     console.log(`Server is running on  ${PORT}`)
@@ -12,7 +13,14 @@ app.listen(PORT, function() {
 // Endpoint to select all events
 app.get("/events", async(req, res) => {
     try {
-        const allEvents = []// query db when it's setup and connected
+
+        await client.connect();
+        const query = {
+            text: 'SELECT * FROM view_events()'
+          };
+
+        const allEvents = await client.query(query);
+        console.log(allEvents.rows);
         res.json(allEvents.rows);
     } catch (err) {
         console.log(err.message);
@@ -22,7 +30,14 @@ app.get("/events", async(req, res) => {
 // Endpoint to select all registered participants
 app.get("/participants", async(req, res) => {
     try {
-        const allParticipants = []// query db when it's setup and connected
+        await client.connect();
+
+        const query = {
+            text: 'SELECT * FROM view_participants()'
+          };
+
+        const allParticipants = await client.query(query);
+        console.log(allParticipants.rows);
         res.json(allParticipants.rows);
     } catch (err) {
         console.error(err.message);
@@ -32,8 +47,25 @@ app.get("/participants", async(req, res) => {
 // Endpoint for creating new events
 app.post("/events", async (req, res) => {
     try {
-        const { uuid, date, time, title, description, email } = req.body;
-        const newEvent = []; // Insert into db when it's setup and connected
+
+        await client.connect();
+
+        const { eventID, date, time, title, description, email } = req.body;
+
+        const query = {
+            text: 'SELECT create_event($1, $2, $3, $4, $5, $6)',
+            values: [
+              eventID,
+              date,
+              time,
+              title,
+              description,
+              email
+            ]
+          };
+
+        const newEvent = await client.query(query);
+        console.log("New event successfully created");
         res.json(newEvent.rows[0]);
     } catch (err) {
         console.error(err.message);
@@ -43,13 +75,29 @@ app.post("/events", async (req, res) => {
 // Endpoint for registering participants
 app.post("/participants", async (req, res) => {
     try {
-        const { uuid, eventID, name, email } = req.body;
-        const newParticipant = []; // Insert into db when it's setup and connected
+        const { participantID, eventID, name, email } = req.body;
+
+        const query = {
+            text: 'SELECT create_participant($1, $2, $3, $4)',
+            values: [
+              participantID,
+              eventID,
+              name,
+              email
+            ]
+          };
+
+        const newParticipant = await client.query(query);
         res.json(newParticipant.rows[0]);
     } catch (err) {
         console.error(err.message);
     }
 })
+
+
+/********
+ * Validation Stuff
+ *******/
 
 function isValidName(name) {
     return name.length != 0 && name.length <= 600;
