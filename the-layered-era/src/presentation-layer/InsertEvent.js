@@ -1,7 +1,12 @@
 import React from 'react';
+import axios from 'axios';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import './forms.css'
+
+const api = axios.create({
+  baseURL: 'http://localhost:3000', // Replace with your actual backend server URL
+});
 
 export default function InsertEvent() {
   return (
@@ -43,15 +48,26 @@ export default function InsertEvent() {
         }}
       
         onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
-        }}
+          fetch('/events', values)
+          .then((response) =>{
+            console.log('Server response: ', response.data);
+            //show message to viewer like "event successfully added"
+          })
+          .catch((error) => {
+            //UUID error logging to user here
+            console.error("Error: ", error)
+          })
+          .finally(() => {
+            setTimeout(() => {
+              alert(JSON.stringify(values, null, 2));
+              setSubmitting(false);
+            }, 400);
+          })
+          }}
       >
 
         {({ isSubmitting }) => (
-          <Form>
+          <Form id="EventForm">
             <h1>Insert an Event!</h1>
 
             <h3 className="label">Event ID:</h3>
