@@ -1,5 +1,5 @@
 CREATE TABLE events (
-    uuid VARCHAR NOT NULL,
+    uuid VARCHAR PRIMARY KEY,
     date VARCHAR,
     time VARCHAR,
     title VARCHAR(255),
@@ -8,10 +8,11 @@ CREATE TABLE events (
 );
 
 CREATE TABLE participants (
-    participant_uuid VARCHAR NOT NULL,
+    participant_uuid VARCHAR PRIMARY KEY,
     event_uuid VARCHAR,
     participant_name VARCHAR(600),
-    participant_email VARCHAR
+    participant_email VARCHAR,
+    FOREIGN KEY event_uuid REFERENCES events(uuid)
 );
 
 CREATE OR REPLACE FUNCTION create_event(
