@@ -1,4 +1,6 @@
 const express = require('express')
+const pg = require('pg')
+var connectionString = "postgres://postgres:password@localhost/ip:5432/event_manager"
 const PORT = process.env.PORT || 4001
 
 const app = express()
