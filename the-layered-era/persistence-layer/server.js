@@ -8,7 +8,8 @@ const connectionString = "postgres://postgres:password@localhost/event_manager"
 app.listen(PORT, function() {
     console.log(`Server is running on  ${PORT}`)
 });
-const cors = require('cors')
+const cors = require('cors');
+const { connect } = require('formik');
 app.use(cors({
     origin: 'http://localhost:3000'
 }));
@@ -87,12 +88,14 @@ app.post("/events", bodyParser.json(), async (req, res) => {
 // Endpoint for registering participants
 app.post("/participants", bodyParser.json(), async (req, res) => {
     try {
+        
         res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
         res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
         res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
         const client = new pg.Client(connectionString);
+        await client.connect();
         const { participantID, eventID, name, email } = req.body;
-
+        
         const query = {
             text: 'SELECT create_participant($1, $2, $3, $4)',
             values: [
@@ -102,10 +105,11 @@ app.post("/participants", bodyParser.json(), async (req, res) => {
               email
             ]
           };
-
+    
         const newParticipant = await client.query(query);
         res.send({message: "Data successfully added.", participantID: participantID, eventID: eventID, name: name, email: email});
         res.json(newParticipant.rows[0]);
+        console.log("participant created");
     } catch (err) {
         console.error(err.message);
     }

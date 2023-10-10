@@ -29,6 +29,7 @@ export default function InsertEvent() {
         }}
        
         onSubmit={(values, { setSubmitting }) => {
+          console.log(values);
           fetch('http://localhost:4001/participants', {
             body: JSON.stringify(values, null, 2),
             mode: "cors",
