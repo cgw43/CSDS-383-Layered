@@ -48,11 +48,17 @@ export default function InsertEvent() {
         }}
       
         onSubmit={(values, { setSubmitting }) => {
-          fetch('/events', values)
-          .then((response) =>{
-            console.log('Server response: ', response.data);
-            //show message to viewer like "event successfully added"
+          fetch('http://localhost:4001/events', {
+            body: JSON.stringify(values, null, 2),
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            method: "POST",
           })
+          .then(response => response.json())
+            //show message to viewer like "event successfully added"
+          .then(text => console.log(text))
           .catch((error) => {
             //UUID error logging to user here
             console.error("Error: ", error)

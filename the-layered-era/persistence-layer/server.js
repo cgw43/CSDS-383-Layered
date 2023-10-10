@@ -2,17 +2,30 @@ const express = require('express');
 const pg = require('pg');
 const PORT = process.env.PORT || 4001
 const app = express();
-
+var bodyParser = require('body-parser')
 const connectionString = "postgres://postgres:password@localhost/event_manager"
 const client = new pg.Client(connectionString);
 
 app.listen(PORT, function() {
     console.log(`Server is running on  ${PORT}`)
 });
+const cors = require('cors')
+app.use(cors({
+    origin: 'http://localhost:3000'
+}));
+
+// parse application/json
+app.use(bodyParser.json())
 
 // Endpoint to select all events
 app.get("/events", async(req, res) => {
     try {
+        res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
+        res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Access-Control-Allow-Origin, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+        // console.log(req)
+        const { eventID, date, time, title, description, email } = req.body;
+
 
         await client.connect();
         const query = {
@@ -45,8 +58,13 @@ app.get("/participants", async(req, res) => {
 });
 
 // Endpoint for creating new events
-app.post("/events", async (req, res) => {
+app.post("/events", bodyParser.json(), async (req, res) => {
     try {
+
+        res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
+        res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+        //console.log(req)
 
         await client.connect();
 
@@ -65,8 +83,9 @@ app.post("/events", async (req, res) => {
           };
 
         const newEvent = await client.query(query);
+        res.send({message: "Data successfully added.", eventID: eventID, date: date, time: time, title: title, description: description, email: email});
         console.log("New event successfully created");
-        res.json(newEvent.rows[0]);
+        //res.json(JSON.stringify(newEvent.rows[0]));
     } catch (err) {
         console.error(err.message);
     }
