@@ -10,7 +10,6 @@ const api = axios.create({
 
 export default function InsertEvent() {
   return (
-    <div>
       <Formik
         initialValues={{ eventID: '', date: '', time:'', title: '', description: '', email: ''}}
         validate={values => {
@@ -79,37 +78,42 @@ export default function InsertEvent() {
           <Form id="EventForm">
             <h1>Insert an Event!</h1>
 
-            <h3 className="label">Event ID:</h3>
-            <Field className="input" type="text" name="eventID" placeholder="Event ID (Optional)"/>
-            <ErrorMessage className="error" name='eventID' component="div"/>
-
-            <h3 className="label">Event Date</h3>
-            <Field className="input" type="date" name="date" />
-            <ErrorMessage className="error" name='date' component="div"/>
-
-            <h3 className="label">Event Time:</h3>
-            <Field className="input" type="time" name="time" />
-            <ErrorMessage className="error" name='time' component="div"/>
-
-            <h3 className="label">Event Title:</h3>
-            <Field className="input" type="text" name="title" placeholder="ex. Architect's Rockin Party"/>
-            <ErrorMessage className="error" name='title' component="div"/>
-
-            <h3 className="label">Event Description:</h3>
-            <Field className="input" type="text" name="description" placeholder="ex. This event is for...."/>
-            <ErrorMessage className="error" name='description' component="div"/>
-
-            <h3 className="label">Event Host's Email:</h3>
-            <Field className="input" type="email" name="email" placeholder="ex. example@gmail.com"/>
-            <ErrorMessage className="error" name='email' component="div"/>
-
+            <div>
+                <h3 className="label">Event ID:</h3>
+                <Field className="input" type="text" name="eventID" placeholder="Event ID (Optional)"/>
+                <ErrorMessage className="error" name='eventID' component="div"/>
+            </div>
+            <div>
+                <h3 className="label">Event Date</h3>
+                <Field className="input" type="date" name="date" />
+                <ErrorMessage className="error" name='date' component="div"/>
+            </div>
+            <div>
+                <h3 className="label">Event Time:</h3>
+                <Field className="input" type="time" name="time" />
+                <ErrorMessage className="error" name='time' component="div"/>
+            </div>
+            <div>
+                <h3 className="label">Event Title:</h3>
+                <Field className="input" type="text" name="title" placeholder="ex. Architect's Rockin Party"/>
+                <ErrorMessage className="error" name='title' component="div"/>
+            </div>
+            <div>
+                <h3 className="label">Event Description:</h3>
+                <Field className="input" type="text" name="description" placeholder="ex. This event is for...."/>
+                <ErrorMessage className="error" name='description' component="div"/>
+            </div>
+            <div>
+                <h3 className="label">Event Host's Email:</h3>
+                <Field className="input" type="email" name="email" placeholder="ex. example@gmail.com"/>
+                <ErrorMessage className="error" name='email' component="div"/>
+            </div>
             <button className="button" type="submit" disabled={isSubmitting}>
               Submit
             </button>
           </Form>
         )}
       </Formik>
-    </div>
   )
 
 }

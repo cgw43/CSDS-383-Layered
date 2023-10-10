@@ -5,7 +5,6 @@ import './forms.css'
 
 export default function InsertEvent() {
   return (
-    <div>
       <Formik
         initialValues={{ participantID: '', eventID: '', name:'', email: ''}}
         validate={values => {
@@ -68,28 +67,32 @@ export default function InsertEvent() {
           <Form>
             <h1>Register a Participant!</h1>
 
-            <h3 className="label"></h3>
-            <Field className="input" type="text" name="participantID" placeholder="Participant ID (Optional)" />
+            <div>
+                <h3 className="label">Participant ID:</h3>
+                <Field className="input" type="text" name="participantID" placeholder="Participant ID (Optional)" />
+            </div>
 
-            <h3 className="label">Event ID: </h3>
-            <Field className="input" type="text" name="eventID" placeholder="Event ID"/>
-            <ErrorMessage className="error" name='eventID' component="div"/>
-
-            <h3 className="label">Participant Name:</h3>
-            <Field className="input" type="text" name="name" placeholder="ex. Luis Jimenez Segovia"/>
-            <ErrorMessage className="error" name='name' component="div"/>
-
-            <h3 className="label">Participant Email:</h3>
-            <Field className="input" type="email" name="email" placeholder="ex. example@gmail.com"/>
-            <ErrorMessage className="error" name='email' component="div"/>
-
+            <div>
+                <h3 className="label">Event ID: </h3>
+                <Field className="input" type="text" name="eventID" placeholder="Event ID"/>
+                <ErrorMessage className="error" name='eventID' component="div"/>
+            </div>
+            <div>
+                <h3 className="label">Participant Name:</h3>
+                <Field className="input" type="text" name="name" placeholder="ex. Luis Jimenez Segovia"/>
+                <ErrorMessage className="error" name='name' component="div"/>
+            </div>
+            <div>
+                <h3 className="label">Participant Email:</h3>
+                <Field className="input" type="email" name="email" placeholder="ex. example@gmail.com"/>
+                <ErrorMessage className="error" name='email' component="div"/>
+            </div>
             <button className="button" type="submit" disabled={isSubmitting}>
               Submit
             </button>
           </Form>
         )}
       </Formik>
-    </div>
   )
 
 }
