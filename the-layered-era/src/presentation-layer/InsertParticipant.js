@@ -76,7 +76,7 @@ export default function InsertEvent() {
             <ErrorMessage className="error" name='eventID' component="div"/>
 
             <h3 className="label">Participant Name:</h3>
-            <Field className="input" type="text" name="name" placeholder="ex. Luis Jimenez Segovina"/>
+            <Field className="input" type="text" name="name" placeholder="ex. Luis Jimenez Segovia"/>
             <ErrorMessage className="error" name='name' component="div"/>
 
             <h3 className="label">Participant Email:</h3>
