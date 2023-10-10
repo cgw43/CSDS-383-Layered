@@ -4,7 +4,6 @@ const PORT = process.env.PORT || 4001
 const app = express();
 
 const connectionString = "postgres://postgres:password@localhost/event_manager"
-const client = new pg.Client(connectionString);
 
 app.listen(PORT, function() {
     console.log(`Server is running on  ${PORT}`)
@@ -13,7 +12,7 @@ app.listen(PORT, function() {
 // Endpoint to select all events
 app.get("/events", async(req, res) => {
     try {
-
+        const client = new pg.Client(connectionString);
         await client.connect();
         const query = {
             text: 'SELECT * FROM view_events()'
@@ -30,6 +29,7 @@ app.get("/events", async(req, res) => {
 // Endpoint to select all registered participants
 app.get("/participants", async(req, res) => {
     try {
+        const client = new pg.Client(connectionString);
         await client.connect();
 
         const query = {
@@ -47,7 +47,7 @@ app.get("/participants", async(req, res) => {
 // Endpoint for creating new events
 app.post("/events", async (req, res) => {
     try {
-
+        const client = new pg.Client(connectionString);
         await client.connect();
 
         const { eventID, date, time, title, description, email } = req.body;
@@ -75,6 +75,7 @@ app.post("/events", async (req, res) => {
 // Endpoint for registering participants
 app.post("/participants", async (req, res) => {
     try {
+        const client = new pg.Client(connectionString);
         const { participantID, eventID, name, email } = req.body;
 
         const query = {
