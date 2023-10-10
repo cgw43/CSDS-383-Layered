@@ -16,6 +16,9 @@ export default function InsertEvent() {
         validate={values => {
           let errors ={};
 
+          if (values.eventID && !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(values.eventID)){
+            errors.eventID ='Event ID must be in proper UUID Format';
+          }
           //TODO: VALID UUID CHECK [REGEX]
 
           if (!values.date){
