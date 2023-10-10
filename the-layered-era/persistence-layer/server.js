@@ -54,7 +54,6 @@ app.get("/participants", async(req, res) => {
 // Endpoint for creating new events
 app.post("/events", bodyParser.json(), async (req, res) => {
     try {
-
         res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
         res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
         res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
@@ -86,8 +85,11 @@ app.post("/events", bodyParser.json(), async (req, res) => {
 })
 
 // Endpoint for registering participants
-app.post("/participants", async (req, res) => {
+app.post("/participants", bodyParser.json(), async (req, res) => {
     try {
+        res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
+        res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
         const client = new pg.Client(connectionString);
         const { participantID, eventID, name, email } = req.body;
 
@@ -102,6 +104,7 @@ app.post("/participants", async (req, res) => {
           };
 
         const newParticipant = await client.query(query);
+        res.send({message: "Data successfully added.", participantID: participantID, eventID: eventID, name: name, email: email});
         res.json(newParticipant.rows[0]);
     } catch (err) {
         console.error(err.message);

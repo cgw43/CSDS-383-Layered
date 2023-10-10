@@ -29,11 +29,28 @@ export default function InsertEvent() {
         }}
        
         onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
-        }}
+          fetch('http://localhost:4001/participants', {
+            body: JSON.stringify(values, null, 2),
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            method: "POST",
+          })
+          .then(response => response.json())
+            //show message to viewer like "event successfully added"
+          .then(text => console.log(text))
+          .catch((error) => {
+            //UUID error logging to user here
+            console.error("Error: ", error)
+          })
+          .finally(() => {
+            setTimeout(() => {
+              alert(JSON.stringify(values, null, 2));
+              setSubmitting(false);
+            }, 400);
+          })
+          }}
       >
 
         {({ isSubmitting }) => (
