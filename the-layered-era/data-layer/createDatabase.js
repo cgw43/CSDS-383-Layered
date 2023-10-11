@@ -4,7 +4,10 @@ var connectionString = "postgres://postgres:password@localhost:5432/";
 function createDB() {
     var pgClient = new pg.Client(connectionString)
     pgClient.connect()
-    let query = `CREATE DATABASE "event_manager";`
+
+    // check that postgres DB exists 
+    let query = `SELECT 'CREATE DATABASE postgres'
+    WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'postgres');`
 
     pgClient.query(query, (err, result) => {
         if (err) {
@@ -17,9 +20,6 @@ function createDB() {
             console.log("Successfully created database event_manager");
         }
     })
-
-    // update string to direct to new DB
-    connectionString = "postgres://postgres:password@localhost:5432/event_manager";
 
     // query
     query = `
@@ -96,7 +96,7 @@ function createDB() {
             SELECT p.participant_uuid AS p_participant_uuid, p.event_uuid AS p_event_uuid, p.participant_name, p.participant_email
             FROM participants p;
         END;
-        $$ LANGUAGE plpgsql;  `
+        $$ LANGUAGE plpgsql;`
 
     pgClient.query(query, (err, result) => {
         if (err) {
