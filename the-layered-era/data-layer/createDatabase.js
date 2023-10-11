@@ -1,10 +1,10 @@
 const pg = require('pg')
-var connectionString = "postgres://postgres:password@localhost:3001/";
+var connectionString = "postgres://postgres:password@localhost:5432/";
 
 function createDB() {
     var pgClient = new pg.Client(connectionString)
     pgClient.connect()
-    let query=  `CREATE DATABASE "event_manager";`
+    let query = `CREATE DATABASE "event_manager";`
 
     pgClient.query(query, (err, result) => {
         if (err) {
@@ -12,10 +12,16 @@ function createDB() {
             pgClient.end(); // Close the database connection
             return;
         }
+
+        else {
+            console.log("Successfully created database event_manager");
+        }
     })
 
-    connectionString = "postgres://postgres:password@localhost:3001/event_manager";
+    // update string to direct to new DB
+    connectionString = "postgres://postgres:password@localhost:5432/event_manager";
 
+    // query
     query = `
         CREATE TABLE events (
             uuid VARCHAR PRIMARY KEY,
@@ -91,11 +97,15 @@ function createDB() {
             FROM participants p;
         END;
         $$ LANGUAGE plpgsql;  `
+
     pgClient.query(query, (err, result) => {
         if (err) {
             console.error('Error running the query:', err);
             pgClient.end(); // Close the database connection
             return;
+        }
+        else {
+            console.log("Successfully created relations")
         }
     })
 }

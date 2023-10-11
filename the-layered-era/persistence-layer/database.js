@@ -1,5 +1,5 @@
 const pg = require('pg')
-const connectionString = "postgres://postgres:password@localhost:3001/event_manager";
+const connectionString = "postgres://postgres:password@localhost:5432/event_manager";
 
 async function createEvent(eventData) {
     var client = new pg.Client(connectionString)

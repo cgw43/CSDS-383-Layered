@@ -1,33 +1,39 @@
 import React, { useState, useEffect } from 'react';
 
 const DynamicTable = () => {
-  const [eventData, setEventData] = useState([]);
-  const [participantData, setParticipantData] = useState([]);
+  const [eventData, setEventData] = useState({});
+  const [participantData, setParticipantData] = useState({});
 
-    
+  // on load, fetch from DB
   useEffect(() => {
 
-    fetch('http://localhost:4001/events', {
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "GET",
-    })
-      .then(response => response.json())
-      .then(data => setEventData(data))
+    const fetchEvents = async () => {
+      const response = await fetch(`http://localhost:4001/events`);
+      const newData = await response.json();
+      console.log(newData);
+      setEventData(newData);
+    };
 
-    fetch('http://localhost:4001/participants', {
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "GET",
-    })
-      .then(response => response.json())
-      .then(data => setParticipantData(data))
+    const fetchParticipants = async () => {
+      const response = await fetch(`http://localhost:4001/participants`);
+      const newData = await response.json();
+      console.log(newData);
+      setParticipantData(newData);
+    };
+
+    fetchEvents();
+    fetchParticipants();
   }, []);
 
+// to properly update eventData
+  useEffect(() => {
+    console.log("eventData updated:", eventData);
+  }, [eventData]);
+
+// to properly update participantData
+  useEffect(() => {
+    console.log("participantData updated:", participantData);
+  }, [participantData]);
 
   return (
     <div>
@@ -44,38 +50,54 @@ const DynamicTable = () => {
             </tr>
           </thead>
           <tbody>
-            {eventData.map((item) => (
-              <tr key={item.eventID}>
-                <td>{item.eventID}</td>
-                <td>{item.date}</td>
-                <td>{item.time}</td>
-                <td>{item.title}</td>
-                <td>{item.description}</td>
-                <td>{item.email}</td>
+          {Object.keys(eventData).length === 0 ? (
+              <tr>
+                <td colSpan="6">No Events Added Yet!</td>
               </tr>
-            ))}
+            ) : (
+              Object.keys(eventData).map((eventID) => {
+                return (
+                  <tr key={eventID}>
+                    <td>{eventData[eventID].event_id}</td>
+                    <td>{eventData[eventID].event_date}</td>
+                    <td>{eventData[eventID].event_time}</td>
+                    <td>{eventData[eventID].event_title}</td>
+                    <td>{eventData[eventID].event_description}</td>
+                    <td>{eventData[eventID].event_host_email}</td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
       </div>
       <div className="container2">
         <table>
-        <thead>
+          <thead>
             <tr>
-              <th>Event</th>
+              <th>Event ID</th>
               <th>Participant ID</th>
               <th>Name</th>
               <th>Email</th>
             </tr>
           </thead>
           <tbody>
-            {participantData.map((item) => (
-              <tr key={item.eventID}>
-                <td>{item.eventID}</td>
-                <td>{item.participantID}</td>
-                <td>{item.name}</td>
-                <td>{item.email}</td>
+            {Object.keys(participantData).length === 0 ? (
+              <tr>
+                <td colSpan="6">No Participants Added Yet!</td>
               </tr>
-            ))}
+            ) : (
+              Object.keys(participantData).map((id) => {
+                return (
+                  <tr key={id}>
+                    <td>{participantData[id].p_event_uuid}</td>
+                    <td>{participantData[id].p_participant_uuid}</td>
+                    <td>{participantData[id].p_participant_name}</td>
+                    <td>{participantData[id].p_participant_email}</td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
       </div>
