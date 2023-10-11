@@ -37,7 +37,10 @@ export default function InsertEvent() {
           return errors;
         }}
        
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={(values, { setSubmitting, resetForm }) => {
+          if (!values.participantID) {
+            values.participantID = crypto.randomUUID();
+          }
           console.log(values);
           fetch('http://localhost:4001/participants', {
             body: JSON.stringify(values, null, 2),
@@ -52,12 +55,13 @@ export default function InsertEvent() {
           .then(text => console.log(text))
           .catch((error) => {
             //UUID error logging to user here
-            console.error("Error: ", error)
+            console.error("Error: ", error);
           })
           .finally(() => {
             setTimeout(() => {
               alert(JSON.stringify(values, null, 2));
               setSubmitting(false);
+              resetForm({values: ''});
             }, 400);
           })
           }}

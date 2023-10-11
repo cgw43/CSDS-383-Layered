@@ -8,6 +8,23 @@ const api = axios.create({
   baseURL: 'http://localhost:3000', // Replace with your actual backend server URL
 });
 
+const formatTime = (time) => {
+  // format time 
+    // convert from 24 hr time to HH:MM AM/PM
+    const hours = parseInt(time.slice(0, 2));
+
+    let convertedHours = (hours % 12).toString().padStart(2, '0');
+    if (convertedHours === '00')
+        convertedHours = '12';
+
+    // Determine AM or PM
+    const amOrPm = hours >= 12 ? 'PM' : 'AM';
+    // reset value to formatted value
+    return `${convertedHours}:${time.slice(3, 5)} ${amOrPm}`;
+}
+
+
+
 export default function InsertEvent() {
   return (
       <Formik
@@ -49,7 +66,12 @@ export default function InsertEvent() {
           return errors;
         }}
       
-        onSubmit={(values, { setSubmitting }) => {
+        onSubmit={(values, { setSubmitting, resetForm }) => {
+          if (!values.eventID) {
+            values.eventID = crypto.randomUUID();
+          }
+          values.time = formatTime(values.time);
+
           fetch('http://localhost:4001/events', {
             body: JSON.stringify(values, null, 2),
             mode: "cors",
@@ -58,7 +80,10 @@ export default function InsertEvent() {
             },
             method: "POST",
           })
-          .then(response => response.json())
+          .then(response => {
+            response.json();
+            console.log(response);
+          })
             //show message to viewer like "event successfully added"
           .then(text => console.log(text))
           .catch((error) => {
@@ -69,6 +94,7 @@ export default function InsertEvent() {
             setTimeout(() => {
               alert(JSON.stringify(values, null, 2));
               setSubmitting(false);
+              resetForm({values: ''})
             }, 400);
           })
           }}
