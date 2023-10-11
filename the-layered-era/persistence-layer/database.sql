@@ -12,7 +12,7 @@ CREATE TABLE participants (
     event_uuid VARCHAR,
     participant_name VARCHAR(600),
     participant_email VARCHAR,
-    FOREIGN KEY event_uuid REFERENCES events(uuid)
+    FOREIGN KEY (event_uuid) REFERENCES events(uuid)
 );
 
 CREATE OR REPLACE FUNCTION create_event(

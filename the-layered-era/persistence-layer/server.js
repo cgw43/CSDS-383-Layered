@@ -3,7 +3,7 @@ const pg = require('pg');
 const PORT = process.env.PORT || 4001
 const app = express();
 var bodyParser = require('body-parser')
-const connectionString = "postgres://postgres:password@localhost/event_manager"
+const connectionString = "postgres://postgres:password@localhost:3001/event_manager"
 
 app.listen(PORT, function() {
     console.log(`Server is running on  ${PORT}`)
