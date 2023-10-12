@@ -64,36 +64,17 @@ select {
   font-weight: bold;
 }
 
-.container{
-  display: flex;
-  justify-content: space-between;
-}
-
-.container1 {
-  border: 1px solid #ddd;
-  overflow: hidden;
-  max-height: 400px; 
-  width: 550px;
-  min-height: 400px;
-  margin: 20px;
-  margin-left: 150px;
-  float: left;
-  overflow-y: auto;
-  padding: 20px;
-}
-
+.container1,
 .container2 {
+  flex: 1;
   border: 1px solid #ddd;
   overflow: hidden;
-  max-height: 400px; 
-  width: 550px;
-  min-height: 400px;
+  max-height: 400px;
   margin: 20px;
-  margin-left: 100px;
-  float: left;
-  overflow-y: auto;
   padding: 20px;
+  box-sizing: border-box;
 }
+
 
 .event{
   width:100%
