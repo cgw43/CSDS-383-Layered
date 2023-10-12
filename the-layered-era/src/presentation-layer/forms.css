@@ -50,11 +50,13 @@ select {
 }
 
 .viewEvents{
-  background-color: rgba(43, 3, 66, 0.222);
+  background-color: rgba(92, 21, 88, 0.378);
   color: white;
-  padding: 5px 15px;
-  margin: 1rem 0;
-  
+  padding: 1% 5%;
+  font-size: 1.6rem;
+  border-radius: 25px;
+  border-style: none;
+  margin-bottom: 1rem;
 }
 
 

@@ -20,7 +20,7 @@ export default function Home() {
                 <InsertParticpant/> 
             </div>
             <button className = "viewEvents" onClick={toggleTableVisibility}>
-                {showTable ? 'Hide Events' : 'View Events'}
+                {showTable ? 'Hide Tables' : 'View Tables'}
             </button>
             {showTable && <DynamicTable />}
         </div>

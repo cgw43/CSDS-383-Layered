@@ -9,7 +9,6 @@ export default function InsertEvent() {
   const [eventData, setEventData] = useState([]);
 
   useEffect(() => {
-
     const fetchEvents = async () => {
       const response = await fetch(`http://localhost:4001/events`);
       const newData = await response.json();
