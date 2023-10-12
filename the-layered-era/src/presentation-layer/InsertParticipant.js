@@ -1,9 +1,25 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { useState, useEffect } from 'react';
 
 import './forms.css'
 
 export default function InsertEvent() {
+
+  const [eventData, setEventData] = useState([]);
+
+  useEffect(() => {
+
+    const fetchEvents = async () => {
+      const response = await fetch(`http://localhost:4001/events`);
+      const newData = await response.json();
+      console.log(newData);
+      setEventData(newData);
+    };
+    fetchEvents();
+  }, []);
+
+
   return (
       <Formik
         initialValues={{ participantID: '', eventID: '', name:'', email: ''}}
@@ -78,7 +94,12 @@ export default function InsertEvent() {
 
             <div>
                 <h3 className="label">Event ID: </h3>
-                <Field className="input" type="text" name="eventID" placeholder="Event ID"/>
+                <Field as="select" name="eventID">
+                  <option value="">Select an EventID</option>
+                  {
+                    eventData.map(event => <option value={event.event_id}>{event.event_id}</option>)
+                  }
+                </Field>
                 <ErrorMessage className="error" name='eventID' component="div"/>
             </div>
             <div>

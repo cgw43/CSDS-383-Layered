@@ -34,6 +34,14 @@ Form > div{
   width: 100%;
 }
 
+select {
+  font-size: 1.5rem;
+  padding : 3%;
+  border-radius: 25px;
+  border-style: none;
+  width: 100%;
+}
+
 .button {
   background-color: rgba(43, 3, 66, 0.222);
   color: white;
