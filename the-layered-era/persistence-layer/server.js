@@ -27,7 +27,6 @@ app.get("/events", async(req, res) => {
           };
 
         const allEvents = await client.query(query);
-        console.log(allEvents.rows);
         res.json(allEvents.rows);
     } catch (err) {
         console.log(err.message);
@@ -45,7 +44,6 @@ app.get("/participants", async(req, res) => {
           };
 
         const allParticipants = await client.query(query);
-        console.log(allParticipants.rows);
         res.json(allParticipants.rows);
     } catch (err) {
         console.error(err.message);
@@ -58,7 +56,6 @@ app.post("/events", bodyParser.json(), async (req, res) => {
         res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
         res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
         res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
-        //console.log(req)
         const client = new pg.Client(connectionString);
         await client.connect();
 
@@ -79,9 +76,9 @@ app.post("/events", bodyParser.json(), async (req, res) => {
         const newEvent = await client.query(query);
         res.send({message: "Data successfully added.", eventID: eventID, date: date, time: time, title: title, description: description, email: email});
         console.log("New event successfully created");
-        //res.json(JSON.stringify(newEvent.rows[0]));
     } catch (err) {
         console.error(err.message);
+        res.json({message: err.message});
     }
 })
 
@@ -108,10 +105,10 @@ app.post("/participants", bodyParser.json(), async (req, res) => {
     
         const newParticipant = await client.query(query);
         res.send({message: "Data successfully added.", participantID: participantID, eventID: eventID, name: name, email: email});
-        res.json(newParticipant.rows[0]);
         console.log("participant created");
     } catch (err) {
         console.error(err.message);
+        res.send({message: err.message});
     }
 })
 

@@ -80,19 +80,28 @@ export default function InsertEvent() {
             },
             method: "POST",
           })
-          .then(response => {
-            response.json();
-            console.log(response);
-          })
+          .then((response) => 
+            response.json()
+          )
             //show message to viewer like "event successfully added"
-          .then(text => console.log(text))
+          .then(text => {
+            if(text.message === 'duplicate key value violates unique constraint "events_pkey"'){
+              alert("This event ID is already taken. Please use a different one.")
+            }
+            else if(text.message === "Data successfully added."){
+              alert("The event was added successfully!")
+            }
+            else{
+              alert("An error occurred adding this event. Please try again.")
+            }
+            })
           .catch((error) => {
             //UUID error logging to user here
             console.error("Error: ", error)
           })
           .finally(() => {
             setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
+              // alert(JSON.stringify(values, null, 2));
               setSubmitting(false);
               resetForm({values: ''})
             }, 400);

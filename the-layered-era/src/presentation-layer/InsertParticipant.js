@@ -12,7 +12,6 @@ export default function InsertEvent() {
     const fetchEvents = async () => {
       const response = await fetch(`http://localhost:4001/events`);
       const newData = await response.json();
-      console.log(newData);
       setEventData(newData);
     };
     fetchEvents();
@@ -56,7 +55,6 @@ export default function InsertEvent() {
           if (!values.participantID) {
             values.participantID = crypto.randomUUID();
           }
-          console.log(values);
           fetch('http://localhost:4001/participants', {
             body: JSON.stringify(values, null, 2),
             mode: "cors",
@@ -67,14 +65,24 @@ export default function InsertEvent() {
           })
           .then(response => response.json())
             //show message to viewer like "event successfully added"
-          .then(text => console.log(text))
+          .then(text => {
+              if(text.message === 'duplicate key value violates unique constraint "participants_pkey"'){
+                alert("This participant ID is already taken. Please use a different one.")
+              }
+              else if(text.message === "Data successfully added."){
+                alert("The participant was added successfully!")
+              }
+              else{
+                alert("An error occurred adding this participant. Please try again.")
+              }
+              })
           .catch((error) => {
             //UUID error logging to user here
             console.error("Error: ", error);
           })
           .finally(() => {
             setTimeout(() => {
-              alert(JSON.stringify(values, null, 2));
+              // alert(JSON.stringify(values, null, 2));
               setSubmitting(false);
               resetForm({values: ''});
             }, 400);
@@ -96,7 +104,7 @@ export default function InsertEvent() {
                 <Field as="select" name="eventID">
                   <option value="">Select an EventID</option>
                   {
-                    eventData.map(event => <option value={event.event_id}>{event.event_id}</option>)
+                    eventData.map(event => <option key={event.event_id} value={event.event_id}>{event.event_id}</option>)
                   }
                 </Field>
                 <ErrorMessage className="error" name='eventID' component="div"/>
