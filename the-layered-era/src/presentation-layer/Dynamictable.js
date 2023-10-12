@@ -10,14 +10,12 @@ const DynamicTable = () => {
     const fetchEvents = async () => {
       const response = await fetch(`http://localhost:4001/events`);
       const newData = await response.json();
-      console.log(newData);
       setEventData(newData);
     };
 
     const fetchParticipants = async () => {
       const response = await fetch(`http://localhost:4001/participants`);
       const newData = await response.json();
-      console.log(newData);
       setParticipantData(newData);
     };
 
